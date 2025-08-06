@@ -2,6 +2,7 @@
 export { User } from './user.entity';
 export { OtpVerification } from './otp-verification.entity';
 export { UserSession } from './user-session.entity';
+export { Role } from './role.entity';
 
 // Location & Neighborhood Entities
 export { State } from './state.entity';

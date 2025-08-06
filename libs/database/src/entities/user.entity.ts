@@ -5,6 +5,8 @@ import {
   CreateDateColumn, 
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
   Index
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
@@ -13,6 +15,7 @@ import { UserNeighborhood } from './user-neighborhood.entity';
 import { Post } from './post.entity';
 import { UserSession } from './user-session.entity';
 import { OtpVerification } from './otp-verification.entity';
+import { Role } from './role.entity';
 
 @Entity('users')
 @Index(['phoneNumber'], { unique: true })
@@ -91,6 +94,14 @@ export class User {
   @OneToMany(() => OtpVerification, otp => otp.user)
   otpVerifications: OtpVerification[];
 
+  @ManyToMany(() => Role, role => role.users)
+  @JoinTable({
+    name: 'user_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: Role[];
+
   // Virtual properties
   @ApiProperty({ description: 'Full name of the user' })
   get fullName(): string {
@@ -101,5 +112,33 @@ export class User {
   toJSON() {
     const { passwordHash, ...result } = this;
     return result;
+  }
+
+  hasRole(roleName: string): boolean {
+    return this.roles?.some(role => role.name === roleName) || false;
+  }
+
+  hasAnyRole(roleNames: string[]): boolean {
+    return roleNames.some(roleName => this.hasRole(roleName));
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.roles?.some(role => role.hasPermission(permission)) || false;
+  }
+
+  hasAnyPermission(permissions: string[]): boolean {
+    return permissions.some(permission => this.hasPermission(permission));
+  }
+
+  getRoleNames(): string[] {
+    return this.roles?.map(role => role.name) || [];
+  }
+
+  getAllPermissions(): string[] {
+    const permissions = new Set<string>();
+    this.roles?.forEach(role => {
+      role.permissions.forEach(permission => permissions.add(permission));
+    });
+    return Array.from(permissions);
   }
 }

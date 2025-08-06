@@ -196,15 +196,15 @@ Homie-backend/
 **Priority**: Critical  
 **Estimated Effort**: 5-6 days  
 **Assignee**: Senior Backend Developer  
-**Status**: ⏳ Pending
+**Status**: ✅ Complete
 
 #### Subtasks:
-- [ ] **3.1** Implement JWT strategy with Passport
-- [ ] **3.2** Create user registration with OTP verification
-- [ ] **3.3** Implement login and refresh token logic
-- [ ] **3.4** Setup role-based access control (RBAC)
-- [ ] **3.5** Create password reset functionality
-- [ ] **3.6** Add rate limiting and security middleware
+- [x] **3.1** Implement JWT strategy with Passport ✅
+- [x] **3.2** Create user registration with OTP verification ✅
+- [x] **3.3** Implement login and refresh token logic ✅
+- [x] **3.4** Setup role-based access control (RBAC) ✅
+- [x] **3.5** Create password reset functionality ✅
+- [x] **3.6** Add rate limiting and security middleware ✅
 
 #### Guidelines:
 1. **Auth Module Structure**:
@@ -355,12 +355,14 @@ Homie-backend/
    ```
 
 #### Acceptance Criteria:
-- [ ] Users can register with phone/email
-- [ ] OTP verification works for phone numbers
-- [ ] JWT tokens are properly generated and validated
-- [ ] Password reset functionality works
-- [ ] Rate limiting prevents abuse
-- [ ] All endpoints have proper validation
+- [x] Users can register with phone/email ✅
+- [x] OTP verification works for phone numbers ✅
+- [x] JWT tokens are properly generated and validated ✅
+- [x] Password reset functionality works ✅
+- [x] Rate limiting prevents abuse ✅
+- [x] All endpoints have proper validation ✅
+- [x] Role-based access control implemented ✅
+- [x] Permission system working ✅
 
 ---
 
