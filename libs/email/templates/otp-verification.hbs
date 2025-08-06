@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{brandName}} - Verification Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .otp-container {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .otp-label {
+            font-size: 14px;
+            color: #16a34a;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        
+        .otp-code {
+            font-size: 36px;
+            font-weight: bold;
+            color: #16a34a;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        .otp-expiry {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 15px;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #22c55e;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h4 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .instructions p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .security-notice {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .security-notice h4 {
+            color: #dc2626;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .security-notice p {
+            color: #7f1d1d;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .footer-links {
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: #22c55e;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        
+        .footer-text {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            width: 36px;
+            height: 36px;
+            line-height: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 30px 20px;
+            }
+            
+            .otp-code {
+                font-size: 28px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏠 {{brandName}}</div>
+            <div class="tagline">Building Better Communities</div>
+        </div>
+        
+        <div class="content">
+            <h2 class="greeting">Hello {{firstName}}! 👋</h2>
+            
+            {{#if (eq purpose "registration")}}
+                <p class="message">
+                    Welcome to {{brandName}}! We're excited to have you join our community. 
+                    To complete your registration and verify your account, please use the verification code below.
+                </p>
+            {{else if (eq purpose "login")}}
+                <p class="message">
+                    You requested to log in to your {{brandName}} account using your email. 
+                    Use the verification code below to complete your login.
+                </p>
+            {{else if (eq purpose "password_reset")}}
+                <p class="message">
+                    You requested to reset your password for your {{brandName}} account. 
+                    Use the verification code below to proceed with password reset.
+                </p>
+            {{else}}
+                <p class="message">
+                    Here's your verification code for {{brandName}}. Use this code to complete your request.
+                </p>
+            {{/if}}
+            
+            <div class="otp-container">
+                <div class="otp-label">Your Verification Code</div>
+                <div class="otp-code">{{otpCode}}</div>
+                <div class="otp-expiry">⏰ This code expires in {{expiresIn}} minutes</div>
+            </div>
+            
+            <div class="instructions">
+                <h4>📋 How to use this code:</h4>
+                {{#if (eq purpose "registration")}}
+                    <p>1. Return to the registration page where you left off</p>
+                    <p>2. Enter this 6-digit code in the verification field</p>
+                    <p>3. Click "Verify Account" to complete your registration</p>
+                {{else if (eq purpose "login")}}
+                    <p>1. Return to the login page</p>
+                    <p>2. Enter this 6-digit code when prompted</p>
+                    <p>3. You'll be logged in automatically after verification</p>
+                {{else if (eq purpose "password_reset")}}
+                    <p>1. Return to the password reset page</p>
+                    <p>2. Enter this 6-digit code in the verification field</p>
+                    <p>3. Create your new password after verification</p>
+                {{/if}}
+            </div>
+            
+            <div class="security-notice">
+                <h4>🔒 Security Notice</h4>
+                <p>
+                    If you didn't request this code, please ignore this email or contact our support team immediately. 
+                    Never share this code with anyone - our team will never ask for your verification code.
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="LinkedIn">💼</a>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">Help Center</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="mailto:{{supportEmail}}">Contact Support</a>
+            </div>
+            
+            <div class="footer-text">
+                © {{currentYear}} {{brandName}}. All rights reserved.<br>
+                Building stronger, safer communities across Nigeria 🇳🇬
+            </div>
+        </div>
+    </div>
+</body>
+</html>

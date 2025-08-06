@@ -54,11 +54,23 @@ export interface ConfirmPasswordResetDto {
   newPassword: string;
 }
 
+export interface InitiateOtpLoginDto {
+  email: string;
+}
+
+export interface VerifyOtpLoginDto {
+  email: string;
+  otpCode: string;
+  deviceType?: string;
+  deviceInfo?: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
+    private emailService: EmailService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(UserSession)
@@ -96,8 +108,39 @@ export class AuthService {
     if (registerDto.phoneNumber) {
       await this.sendOTP(user.id, registerDto.phoneNumber, 'phone', 'registration');
     } else {
-      await this.sendOTP(user.id, registerDto.email, 'email', 'registration');
+      // Generate and send OTP for email verification
+      const otpCode = this.generateOTP();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+      // Store OTP
+      await this.otpRepository.save({
+        userId: user.id,
+        otpCode,
+        purpose: 'registration',
+        expiresAt,
+        isUsed: false,
+      });
+
+      // Send OTP email
+      const emailData: OtpEmailData = {
+        firstName: user.firstName,
+        otpCode,
+        expiresIn: 10,
+        purpose: 'registration',
+      };
+
+      await this.emailService.sendOtpEmail(user.email, emailData);
     }
+
+    // Send welcome email (async, don't wait)
+    const welcomeEmailData: WelcomeEmailData = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    };
+    this.emailService.sendWelcomeEmail(user.email, welcomeEmailData).catch(error => {
+      console.error('Failed to send welcome email:', error);
+    });
 
     return {
       message: 'Registration successful. Please verify your account.',
@@ -305,8 +348,27 @@ export class AuthService {
       throw new BadRequestException('Account is deactivated');
     }
 
-    // Send OTP for password reset
-    await this.sendOTP(user.id, user.email, 'email', 'password_reset');
+    // Generate and send OTP for password reset
+    const otpCode = this.generateOTP();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Store OTP
+    await this.otpRepository.save({
+      userId: user.id,
+      otpCode,
+      purpose: 'password_reset',
+      expiresAt,
+      isUsed: false,
+    });
+
+    // Send password reset email
+    const emailData: PasswordResetEmailData = {
+      firstName: user.firstName,
+      resetCode: otpCode,
+      expiresIn: 10,
+    };
+
+    await this.emailService.sendPasswordResetEmail(user.email, emailData);
 
     return { 
       message: 'If the email exists, a password reset code has been sent.',
@@ -340,6 +402,112 @@ export class AuthService {
     );
 
     return { message: 'Password has been reset successfully. Please log in with your new password.' };
+  }
+
+  async initiateOtpLogin(initiateOtpDto: InitiateOtpLoginDto): Promise<{ message: string; userId?: string }> {
+    const user = await this.userRepository.findOne({
+      where: { email: initiateOtpDto.email },
+    });
+
+    if (!user) {
+      // Don't reveal if email exists for security
+      return { message: 'If the email exists, a login code has been sent.' };
+    }
+
+    if (!user.isActive) {
+      throw new BadRequestException('Account is deactivated');
+    }
+
+    if (!user.isVerified) {
+      throw new BadRequestException('Please verify your account first');
+    }
+
+    // Generate and send OTP for login
+    const otpCode = this.generateOTP();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Store OTP
+    await this.otpRepository.save({
+      userId: user.id,
+      otpCode,
+      purpose: 'login',
+      expiresAt,
+      isUsed: false,
+    });
+
+    // Send OTP email
+    const emailData: OtpEmailData = {
+      firstName: user.firstName,
+      otpCode,
+      expiresIn: 10,
+      purpose: 'login',
+    };
+
+    await this.emailService.sendOtpEmail(user.email, emailData);
+
+    return { 
+      message: 'If the email exists, a login code has been sent.',
+      userId: user.id // Only for development/testing
+    };
+  }
+
+  async verifyOtpLogin(verifyOtpDto: VerifyOtpLoginDto): Promise<AuthResponse> {
+    const user = await this.userRepository.findOne({
+      where: { email: verifyOtpDto.email },
+      relations: ['roles'],
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or OTP');
+    }
+
+    if (!user.isActive) {
+      throw new BadRequestException('Account is deactivated');
+    }
+
+    if (!user.isVerified) {
+      throw new BadRequestException('Please verify your account first');
+    }
+
+    // Verify OTP
+    const otpVerification = await this.verifyOTP({
+      userId: user.id,
+      otpCode: verifyOtpDto.otpCode,
+      purpose: 'login',
+    });
+
+    if (!otpVerification.verified) {
+      throw new UnauthorizedException('Invalid or expired login code');
+    }
+
+    // Generate tokens
+    const tokens = await this.generateTokens(user);
+
+    // Store session
+    const deviceInfo = {
+      type: verifyOtpDto.deviceType || 'web',
+      info: verifyOtpDto.deviceInfo || 'Unknown Device',
+      loginMethod: 'otp_email',
+    };
+
+    await this.storeSession(user.id, tokens.refreshToken, deviceInfo);
+
+    return tokens;
+  }
+
+  async testEmailService(email: string): Promise<{ message: string; success: boolean }> {
+    try {
+      const success = await this.emailService.sendTestEmail(email);
+      return {
+        message: success ? 'Test email sent successfully' : 'Failed to send test email',
+        success,
+      };
+    } catch (error) {
+      return {
+        message: `Email service error: ${error.message}`,
+        success: false,
+      };
+    }
   }
 
   private async storeSession(userId: string, refreshToken: string, deviceInfo?: any): Promise<void> {

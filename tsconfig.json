@@ -45,6 +45,12 @@
       ],
       "@app/validation/*": [
         "libs/validation/src/*"
+      ],
+      "yes/email": [
+        "libs/email/src"
+      ],
+      "yes/email/*": [
+        "libs/email/src/*"
       ]
     }
   }

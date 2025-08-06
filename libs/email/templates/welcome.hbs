@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to {{brandName}}!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            padding: 50px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-message {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 26px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .intro {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.7;
+        }
+        
+        .features {
+            margin: 40px 0;
+        }
+        
+        .features h3 {
+            color: #1f2937;
+            font-size: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .feature h4 {
+            color: #16a34a;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .feature p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .cta-title {
+            color: #16a34a;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .cta-text {
+            color: #6b7280;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .btn-primary {
+            background-color: #22c55e;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: #22c55e;
+            border: 2px solid #22c55e;
+        }
+        
+        .tips {
+            background-color: #f8fafc;
+            border-left: 4px solid #22c55e;
+            border-radius: 0 8px 8px 0;
+            padding: 25px;
+            margin: 40px 0;
+        }
+        
+        .tips h4 {
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .tips ul {
+            color: #6b7280;
+            padding-left: 20px;
+        }
+        
+        .tips li {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .neighborhood-info {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+            border: 1px solid #fbbf24;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .neighborhood-info h4 {
+            color: #d97706;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .neighborhood-info p {
+            color: #92400e;
+            font-size: 16px;
+        }
+        
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .footer-links {
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: #22c55e;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        
+        .footer-text {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            width: 36px;
+            height: 36px;
+            line-height: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 30px 20px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏠 {{brandName}}</div>
+            <div class="welcome-message">Welcome to the Community!</div>
+            <div class="tagline">Building Better Communities Together</div>
+        </div>
+        
+        <div class="content">
+            <h2 class="greeting">Hello {{firstName}} {{lastName}}! 🎉</h2>
+            
+            <p class="intro">
+                We're thrilled to welcome you to {{brandName}} - Nigeria's premier neighborhood community platform. 
+                You're now part of a growing network of neighbors who care about building stronger, safer, and more connected communities.
+            </p>
+            
+            {{#if neighborhoodName}}
+            <div class="neighborhood-info">
+                <h4>🏘️ You're now part of {{neighborhoodName}}</h4>
+                <p>Connect with your neighbors and stay updated on everything happening in your area!</p>
+            </div>
+            {{/if}}
+            
+            <div class="features">
+                <h3>🌟 What You Can Do Now</h3>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <div class="feature-icon">👥</div>
+                        <h4>Connect with Neighbors</h4>
+                        <p>Find and chat with people in your neighborhood. Build meaningful relationships right next door.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">📢</div>
+                        <h4>Share & Discover</h4>
+                        <p>Post updates, ask questions, share recommendations, and stay informed about local events.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">🛒</div>
+                        <h4>Local Marketplace</h4>
+                        <p>Buy, sell, or trade items with trusted neighbors. Support local businesses and services.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <h4>Local Events</h4>
+                        <p>Discover community events, organize gatherings, and participate in neighborhood activities.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">🛡️</div>
+                        <h4>Safety Network</h4>
+                        <p>Report incidents, share safety alerts, and work together to keep your neighborhood secure.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">📱</div>
+                        <h4>Mobile Ready</h4>
+                        <p>Access everything on the go with our mobile-friendly platform. Stay connected anywhere.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h3 class="cta-title">🚀 Ready to Get Started?</h3>
+                <p class="cta-text">Complete your profile and start connecting with your neighbors today!</p>
+                <div class="cta-buttons">
+                    <a href="{{dashboardUrl}}" class="btn btn-primary">Go to Dashboard</a>
+                    <a href="{{loginUrl}}" class="btn btn-secondary">Log In</a>
+                </div>
+            </div>
+            
+            <div class="tips">
+                <h4>💡 Quick Tips to Get Started:</h4>
+                <ul>
+                    <li><strong>Complete your profile:</strong> Add a photo and tell neighbors a bit about yourself</li>
+                    <li><strong>Join your neighborhood:</strong> Search and join your specific neighborhood group</li>
+                    <li><strong>Introduce yourself:</strong> Make your first post to say hello to your neighbors</li>
+                    <li><strong>Explore safely:</strong> Review our community guidelines and safety features</li>
+                    <li><strong>Stay active:</strong> The more you participate, the stronger your community becomes</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="LinkedIn">💼</a>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">Help Center</a>
+                <a href="#">Community Guidelines</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="mailto:{{supportEmail}}">Contact Support</a>
+            </div>
+            
+            <div class="footer-text">
+                © {{currentYear}} {{brandName}}. All rights reserved.<br>
+                Building stronger, safer communities across Nigeria 🇳🇬<br><br>
+                <strong>Need help?</strong> Contact us at {{supportEmail}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

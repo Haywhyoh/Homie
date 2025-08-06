@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{brandName}} - Email Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #22c55e;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .test-info {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .test-info h4 {
+            color: #16a34a;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .test-info p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .footer-text {
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏠 {{brandName}}</div>
+            <div class="tagline">Email Service Test</div>
+        </div>
+        
+        <div class="content">
+            <div class="success-icon">✅</div>
+            <h1 class="title">Email Service Working!</h1>
+            
+            <p class="message">
+                Congratulations! Your {{brandName}} email service is configured correctly and working perfectly. 
+                This test email confirms that your Brevo integration is functioning as expected.
+            </p>
+            
+            <div class="test-info">
+                <h4>📊 Test Details</h4>
+                <p><strong>Test Time:</strong> {{testTime}}</p>
+                <p><strong>Service:</strong> Brevo Email API</p>
+                <p><strong>Template Engine:</strong> Handlebars</p>
+                <p><strong>Status:</strong> ✅ Operational</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-text">
+                © {{currentYear}} {{brandName}}. All rights reserved.<br>
+                Email service powered by Brevo<br><br>
+                <strong>Need support?</strong> Contact us at {{supportEmail}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

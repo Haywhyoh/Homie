@@ -35,6 +35,7 @@
     "db:seed": "nest start --entryFile=seeder"
   },
   "dependencies": {
+    "@getbrevo/brevo": "^3.0.1",
     "@nestjs/cache-manager": "^3.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
@@ -45,12 +46,17 @@
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@types/nodemailer": "^6.4.17",
     "bcrypt": "^6.0.0",
     "cache-manager-ioredis-yet": "^2.1.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^17.2.1",
+    "handlebars": "^4.7.8",
     "ioredis": "^5.7.0",
+    "mjml": "^4.15.3",
+    "mjml-handlebars": "^0.3.2",
+    "nodemailer": "^7.0.5",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
@@ -112,7 +118,8 @@
       "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
       "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
-      "^@app/validation(|/.*)$": "<rootDir>/libs/validation/src/$1"
+      "^@app/validation(|/.*)$": "<rootDir>/libs/validation/src/$1",
+      "^yes/email(|/.*)$": "<rootDir>/libs/email/src/$1"
     }
   }
 }

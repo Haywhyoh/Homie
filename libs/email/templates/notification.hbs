@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - {{brandName}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .notification-icon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .notification-content {
+            background-color: #f8fafc;
+            border-left: 4px solid #22c55e;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: #22c55e;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .footer-links {
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: #22c55e;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        
+        .footer-text {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏠 {{brandName}}</div>
+            <div class="tagline">Community Notification</div>
+        </div>
+        
+        <div class="content">
+            {{#if icon}}
+            <div class="notification-icon">{{icon}}</div>
+            {{/if}}
+            
+            {{#if title}}
+            <h1 class="title">{{title}}</h1>
+            {{/if}}
+            
+            {{#if message}}
+            <p class="message">{{message}}</p>
+            {{/if}}
+            
+            {{#if content}}
+            <div class="notification-content">
+                {{{content}}}
+            </div>
+            {{/if}}
+            
+            {{#if ctaText}}
+            <div style="text-align: center;">
+                <a href="{{ctaUrl}}" class="cta-button">{{ctaText}}</a>
+            </div>
+            {{/if}}
+        </div>
+        
+        <div class="footer">
+            <div class="footer-links">
+                <a href="#">Unsubscribe</a>
+                <a href="#">Notification Settings</a>
+                <a href="mailto:{{supportEmail}}">Contact Support</a>
+            </div>
+            
+            <div class="footer-text">
+                © {{currentYear}} {{brandName}}. All rights reserved.<br>
+                Building stronger, safer communities across Nigeria 🇳🇬
+            </div>
+        </div>
+    </div>
+</body>
+</html>

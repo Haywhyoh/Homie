@@ -26,7 +26,9 @@ import {
   VerifyOtpDto, 
   RefreshTokenDto,
   ResetPasswordDto,
-  ConfirmPasswordResetDto
+  ConfirmPasswordResetDto,
+  InitiateOtpLoginDto,
+  VerifyOtpLoginDto
 } from '@app/validation';
 import { User } from '@app/database';
 
@@ -206,6 +208,52 @@ export class AuthController {
     return this.authService.confirmPasswordReset(confirmResetDto);
   }
 
+  @Post('login/otp/initiate')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Initiate OTP login via email' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'OTP login code sent to email (if email exists)' 
+  })
+  async initiateOtpLogin(@Body() initiateOtpDto: InitiateOtpLoginDto) {
+    return this.authService.initiateOtpLogin(initiateOtpDto);
+  }
+
+  @Post('login/otp/verify')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Verify OTP login code' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Login successful with JWT tokens',
+    schema: {
+      type: 'object',
+      properties: {
+        accessToken: { type: 'string' },
+        refreshToken: { type: 'string' },
+        user: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            firstName: { type: 'string' },
+            lastName: { type: 'string' },
+            email: { type: 'string' },
+            phoneNumber: { type: 'string' },
+            isVerified: { type: 'boolean' }
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Invalid or expired OTP code' 
+  })
+  async verifyOtpLogin(@Body() verifyOtpDto: VerifyOtpLoginDto) {
+    return this.authService.verifyOtpLogin(verifyOtpDto);
+  }
+
   @Get('me/roles')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -240,5 +288,17 @@ export class AuthController {
       user: user.email,
       roles: user.getRoleNames(),
     };
+  }
+
+  @Post('test/email')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Test email service functionality' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Test email sent successfully' 
+  })
+  async testEmail(@CurrentUser() user: User) {
+    return this.authService.testEmailService(user.email);
   }
 }

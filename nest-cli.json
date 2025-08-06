@@ -55,6 +55,15 @@
         "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
     },
+    "email": {
+      "type": "library",
+      "root": "libs/email",
+      "entryFile": "index",
+      "sourceRoot": "libs/email/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/email/tsconfig.lib.json"
+      }
+    },
     "events-service": {
       "type": "application",
       "root": "apps/events-service",
@@ -64,7 +73,6 @@
         "tsConfigPath": "apps/events-service/tsconfig.app.json"
       }
     },
-
     "marketplace-service": {
       "type": "application",
       "root": "apps/marketplace-service",
