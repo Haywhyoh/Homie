@@ -1,7 +1,7 @@
 
-Product Requirements Document (PRD) for Homie (NextDoor for Nigeria)
+Product Requirements Document (PRD) for HoodMe (NextDoor for Nigeria)
 1. Overview
-Homie is a mobile application designed to foster community connection, information exchange, and collaboration among individuals living in various neighborhoods across Nigeria. The app will allow users to interact with their neighbors, share local news, organize events, seek services, and offer recommendations, all within a trusted and geographically relevant environment.
+HoodMe is a mobile application designed to foster community connection, information exchange, and collaboration among individuals living in various neighborhoods across Nigeria. The app will allow users to interact with their neighbors, share local news, organize events, seek services, and offer recommendations, all within a trusted and geographically relevant environment.
 2. Goals and Objectives
 Facilitate community interaction: Strengthen community ties by providing an online platform where neighbors can connect, share, and collaborate.
 

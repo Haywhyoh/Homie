@@ -1,0 +1,110 @@
+name: Monorepo CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      mobile: ${{ steps.changes.outputs.mobile }}
+      docs: ${{ steps.changes.outputs.docs }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          backend:
+            - 'backend/**'
+            - '.github/workflows/backend-ci.yml'
+            - '.github/workflows/monorepo-ci.yml'
+          mobile:
+            - 'Hommie_Mobile/**'
+            - '.github/workflows/mobile-ci.yml'
+            - '.github/workflows/monorepo-ci.yml'
+          docs:
+            - '*.md'
+            - 'CLAUDE.md'
+            - 'backend/*.md'
+            - 'Hommie_Mobile/*.md'
+
+  trigger-backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    uses: ./.github/workflows/backend-ci.yml
+    secrets: inherit
+
+  trigger-mobile:
+    needs: changes
+    if: ${{ needs.changes.outputs.mobile == 'true' }}
+    uses: ./.github/workflows/mobile-ci.yml
+    secrets: inherit
+
+  docs-check:
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check documentation
+      run: |
+        echo "Checking documentation files..."
+        # Add documentation linting/checking here
+        find . -name "*.md" -exec echo "Found: {}" \;
+
+  integration-tests:
+    needs: [changes, trigger-backend, trigger-mobile]
+    if: always() && (needs.changes.outputs.backend == 'true' && needs.changes.outputs.mobile == 'true')
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+    
+    - name: Run integration tests
+      run: |
+        echo "Running integration tests between mobile and backend"
+        # Add integration test commands here
+        # Example: API contract tests, E2E tests, etc.
+
+  security-scan:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security scan
+      uses: securecodewarrior/github-action-add-sarif@v1
+      with:
+        sarif-file: 'security-scan-results.sarif'
+      continue-on-error: true
+    
+    - name: Dependency vulnerability scan
+      run: |
+        echo "Scanning for vulnerabilities..."
+        # Add dependency scanning here (e.g., npm audit, snyk)
+
+  notify-status:
+    needs: [trigger-backend, trigger-mobile, integration-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        echo "Backend Status: ${{ needs.trigger-backend.result }}"
+        echo "Mobile Status: ${{ needs.trigger-mobile.result }}"
+        echo "Integration Status: ${{ needs.integration-tests.result }}"
+        # Add notification logic here (Slack, Discord, email, etc.)

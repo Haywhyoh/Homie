@@ -1,7 +1,7 @@
-# Homie Technology Stack
+# HoodMe Technology Stack
 
 ## Overview
-This document outlines the complete technology stack for Homie, optimized for the Nigerian market and scalable architecture.
+This document outlines the complete technology stack for HoodMe, optimized for the Nigerian market and scalable architecture.
 
 ## Backend Framework & Runtime
 
@@ -203,9 +203,9 @@ storage_strategy:
 ```yaml
 cloudflare:
   zones:
-    api: api.Homie.com
-    cdn: cdn.Homie.com
-    assets: assets.Homie.com
+    api: api.HoodMe.com
+    cdn: cdn.HoodMe.com
+    assets: assets.HoodMe.com
   
   features:
     - image_optimization
@@ -264,8 +264,8 @@ logging_stack:
 ```typescript
 interface JWTConfig {
   algorithm: 'RS256';
-  issuer: 'Homie.com';
-  audience: 'Homie-api';
+  issuer: 'HoodMe.com';
+  audience: 'HoodMe-api';
   expiresIn: '15m'; // Access token
   refreshExpiresIn: '30d'; // Refresh token
 }
@@ -472,7 +472,7 @@ provider "aws" {
 
 module "eks" {
   source = "./modules/eks"
-  cluster_name = "Homie"
+  cluster_name = "HoodMe"
   node_groups = {
     general = {
       instance_types = ["t3.medium"]
@@ -592,4 +592,4 @@ interface OfflineCapabilities {
 }
 ```
 
-This technology stack is designed to provide a robust, scalable, and cost-effective solution for Homie while being optimized for the Nigerian market conditions and requirements.
+This technology stack is designed to provide a robust, scalable, and cost-effective solution for HoodMe while being optimized for the Nigerian market conditions and requirements.

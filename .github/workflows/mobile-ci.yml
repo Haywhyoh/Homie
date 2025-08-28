@@ -1,0 +1,193 @@
+name: Mobile App CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'Hommie_Mobile/**'
+      - '.github/workflows/mobile-ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Hommie_Mobile/**'
+      - '.github/workflows/mobile-ci.yml'
+
+defaults:
+  run:
+    working-directory: Hommie_Mobile
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: Hommie_Mobile/package-lock.json
+
+    - name: Setup Expo CLI
+      run: npm install -g @expo/cli
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Check TypeScript
+      run: npx tsc --noEmit
+
+    - name: Run linter
+      run: npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0
+
+    - name: Check formatting
+      run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
+
+    # Note: Add tests when test framework is implemented
+    # - name: Run tests
+    #   run: npm test
+
+  build-preview:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        cache-dependency-path: Hommie_Mobile/package-lock.json
+
+    - name: Setup Expo CLI
+      run: npm install -g @expo/cli
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup Expo
+      uses: expo/expo-github-action@v8
+      with:
+        expo-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
+
+    - name: Build Preview
+      run: expo build:web --no-pwa
+      env:
+        EXPO_PUBLIC_API_URL: ${{ secrets.STAGING_API_URL }}
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-build-preview
+        path: Hommie_Mobile/web-build/
+
+  build-staging:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: staging
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        cache-dependency-path: Hommie_Mobile/package-lock.json
+
+    - name: Setup Expo CLI
+      run: npm install -g @expo/cli
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup Expo
+      uses: expo/expo-github-action@v8
+      with:
+        expo-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
+
+    - name: Build for staging
+      run: |
+        expo build:web --no-pwa
+        expo build:android --type apk
+      env:
+        EXPO_PUBLIC_API_URL: ${{ secrets.STAGING_API_URL }}
+        EXPO_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+
+    - name: Upload staging builds
+      uses: actions/upload-artifact@v4
+      with:
+        name: staging-builds
+        path: |
+          Hommie_Mobile/web-build/
+          Hommie_Mobile/*.apk
+
+    - name: Deploy to staging
+      run: |
+        echo "Deploying mobile app to staging environment"
+        # Add deployment commands here (e.g., upload to staging server)
+
+  build-production:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        cache-dependency-path: Hommie_Mobile/package-lock.json
+
+    - name: Setup Expo CLI
+      run: npm install -g @expo/cli
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup Expo
+      uses: expo/expo-github-action@v8
+      with:
+        expo-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
+
+    - name: Build production apps
+      run: |
+        expo build:web --no-pwa
+        expo build:android --type app-bundle
+        expo build:ios --type archive
+      env:
+        EXPO_PUBLIC_API_URL: ${{ secrets.PRODUCTION_API_URL }}
+        EXPO_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        EXPO_PUBLIC_SMS_SERVICE_API_KEY: ${{ secrets.SMS_SERVICE_API_KEY }}
+
+    - name: Upload production builds
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-builds
+        path: |
+          Hommie_Mobile/web-build/
+          Hommie_Mobile/*.aab
+          Hommie_Mobile/*.ipa
+
+    - name: Deploy to production
+      run: |
+        echo "Deploying mobile app to production"
+        # Add deployment commands here (e.g., upload to app stores, CDN)

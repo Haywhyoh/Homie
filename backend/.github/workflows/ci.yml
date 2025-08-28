@@ -14,9 +14,9 @@ jobs:
       postgres:
         image: postgis/postgis:15-3.3
         env:
-          POSTGRES_DB: homie_test
-          POSTGRES_USER: homie_user
-          POSTGRES_PASSWORD: homie_password
+          POSTGRES_DB: HoodMe_test
+          POSTGRES_USER: HoodMe_user
+          POSTGRES_PASSWORD: HoodMe_password
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -59,9 +59,9 @@ jobs:
       env:
         DATABASE_HOST: localhost
         DATABASE_PORT: 5432
-        DATABASE_USERNAME: homie_user
-        DATABASE_PASSWORD: homie_password
-        DATABASE_NAME: homie_test
+        DATABASE_USERNAME: HoodMe_user
+        DATABASE_PASSWORD: HoodMe_password
+        DATABASE_NAME: HoodMe_test
         REDIS_HOST: localhost
         REDIS_PORT: 6379
         JWT_SECRET: test-secret-key-for-ci
@@ -93,11 +93,11 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker build -t homie/auth-service -f apps/auth-service/Dockerfile .
-        docker build -t homie/user-service -f apps/user-service/Dockerfile .
-        docker build -t homie/social-service -f apps/social-service/Dockerfile .
-        docker build -t homie/messaging-service -f apps/messaging-service/Dockerfile .
-        docker build -t homie/marketplace-service -f apps/marketplace-service/Dockerfile .
-        docker build -t homie/events-service -f apps/events-service/Dockerfile .
-        docker build -t homie/notification-service -f apps/notification-service/Dockerfile .
-        docker build -t homie/api-gateway -f apps/api-gateway/Dockerfile .
+        docker build -t HoodMe/auth-service -f apps/auth-service/Dockerfile .
+        docker build -t HoodMe/user-service -f apps/user-service/Dockerfile .
+        docker build -t HoodMe/social-service -f apps/social-service/Dockerfile .
+        docker build -t HoodMe/messaging-service -f apps/messaging-service/Dockerfile .
+        docker build -t HoodMe/marketplace-service -f apps/marketplace-service/Dockerfile .
+        docker build -t HoodMe/events-service -f apps/events-service/Dockerfile .
+        docker build -t HoodMe/notification-service -f apps/notification-service/Dockerfile .
+        docker build -t HoodMe/api-gateway -f apps/api-gateway/Dockerfile .

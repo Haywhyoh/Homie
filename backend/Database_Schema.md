@@ -1,7 +1,7 @@
-# Homie Database Schema
+# HoodMe Database Schema
 
 ## Overview
-This document contains the complete database schema for Homie, designed to support all features outlined in the PRD.
+This document contains the complete database schema for HoodMe, designed to support all features outlined in the PRD.
 
 ## Database Technology
 - **Primary Database**: PostgreSQL 15+

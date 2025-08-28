@@ -24,7 +24,7 @@ import { redisStore } from 'cache-manager-ioredis-yet';
           connectTimeout: 10000, // 10 seconds
           commandTimeout: 5000, // 5 seconds
           // Key prefix for this application
-          keyPrefix: 'homie:',
+          keyPrefix: 'HoodMe:',
           // Default TTL in seconds (1 hour)
           ttl: 3600,
         };
