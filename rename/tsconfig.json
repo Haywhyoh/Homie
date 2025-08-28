@@ -46,10 +46,10 @@
       "@app/validation/*": [
         "libs/validation/src/*"
       ],
-      "yes/email": [
+      "@app/email": [
         "libs/email/src"
       ],
-      "yes/email/*": [
+      "@app/email/*": [
         "libs/email/src/*"
       ]
     }

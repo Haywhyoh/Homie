@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule as SharedAuthModule } from '@app/auth';
-import { DatabaseModule, User, UserSession, OtpVerification, Role } from '@app/database';
+import { DatabaseModule } from '@app/database';
 import { AuthController } from './auth.controller';
 
 @Module({
@@ -17,7 +16,6 @@ import { AuthController } from './auth.controller';
       limit: 10, // 10 requests per minute
     }]),
     DatabaseModule,
-    TypeOrmModule.forFeature([User, UserSession, OtpVerification, Role]),
     SharedAuthModule,
   ],
   controllers: [AuthController],

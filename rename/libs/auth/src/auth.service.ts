@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User, UserSession, OtpVerification } from '@app/database';
 import { JwtPayload } from './strategies/jwt.strategy';
+import { EmailService, OtpEmailData, WelcomeEmailData, PasswordResetEmailData } from '@app/email';
 
 export interface AuthResponse {
   accessToken: string;
@@ -78,6 +79,10 @@ export class AuthService {
     @InjectRepository(OtpVerification)
     private otpRepository: Repository<OtpVerification>,
   ) {}
+
+  private generateOTP(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
 
   async register(registerDto: RegisterDto): Promise<{ message: string; userId: string }> {
     // Check if user exists
@@ -271,7 +276,7 @@ export class AuthService {
     );
 
     // Generate 6-digit OTP
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = this.generateOTP();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     await this.otpRepository.save({

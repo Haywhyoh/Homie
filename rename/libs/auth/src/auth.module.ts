@@ -1,9 +1,9 @@
 import { Module, Global } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User, UserSession, OtpVerification, Role } from '@app/database';
+import { DatabaseModule } from '@app/database';
+import { EmailModule } from '@app/email';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
@@ -16,6 +16,8 @@ import { PermissionsGuard } from './guards/permissions.guard';
 @Module({
   imports: [
     ConfigModule,
+    DatabaseModule,
+    EmailModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -27,7 +29,6 @@ import { PermissionsGuard } from './guards/permissions.guard';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User, UserSession, OtpVerification, Role]),
   ],
   providers: [
     AuthService,

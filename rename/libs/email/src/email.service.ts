@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as SibApiV3Sdk from '@getbrevo/brevo';
+import { TransactionalEmailsApi } from '@getbrevo/brevo';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -39,7 +39,7 @@ export interface PasswordResetEmailData {
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
-  private brevoApi: SibApiV3Sdk.TransactionalEmailsApi;
+  private brevoApi: TransactionalEmailsApi;
   private defaultSender: { name: string; email: string };
 
   constructor(private configService: ConfigService) {
@@ -47,7 +47,7 @@ export class EmailService {
     this.initializeHandlebars();
     this.defaultSender = {
       name: this.configService.get<string>('EMAIL_FROM_NAME', 'Homie Community'),
-      email: this.configService.get<string>('EMAIL_FROM_ADDRESS', 'noreply@homiecommunity.ng'),
+      email: this.configService.get<string>('EMAIL_FROM_ADDRESS', 'ayomide@codemygig.com'),
     };
   }
 
@@ -58,11 +58,8 @@ export class EmailService {
       return;
     }
 
-    const defaultClient = SibApiV3Sdk.ApiClient.instance;
-    const apiKeyAuth = defaultClient.authentications['api-key'];
-    apiKeyAuth.apiKey = apiKey;
-
-    this.brevoApi = new SibApiV3Sdk.TransactionalEmailsApi();
+    this.brevoApi = new TransactionalEmailsApi();
+    this.brevoApi.setApiKey(0, apiKey); // 0 is the apiKey enum value
     this.logger.log('Brevo email service initialized successfully');
   }
 
