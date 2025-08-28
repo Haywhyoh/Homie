@@ -1,14 +1,14 @@
-# Homie API Documentation
+# HoodMe API Documentation
 
 ## Overview
-This document outlines the complete API structure for Homie, including REST endpoints, WebSocket events, and authentication flows.
+This document outlines the complete API structure for HoodMe, including REST endpoints, WebSocket events, and authentication flows.
 
 ## Base Configuration
 
 ### API Base URL
 ```
-Production: https://api.Homie.com
-Staging: https://staging-api.Homie.com
+Production: https://api.HoodMe.com
+Staging: https://staging-api.HoodMe.com
 Development: http://localhost:3000
 ```
 
@@ -161,7 +161,7 @@ Get current user profile.
     "last_name": "Doe",
     "email": "user@example.com",
     "phone_number": "+2348123456789",
-    "profile_picture_url": "https://cdn.Homie.com/users/profile_123.jpg",
+    "profile_picture_url": "https://cdn.HoodMe.com/users/profile_123.jpg",
     "date_of_birth": "1990-05-15",
     "gender": "male",
     "preferred_language": "en",
@@ -213,7 +213,7 @@ Search for users within neighborhoods.
         "id": "770f9500-f39c-51e5-b827-557766552222",
         "first_name": "Jane",
         "last_name": "Smith",
-        "profile_picture_url": "https://cdn.Homie.com/users/profile_456.jpg",
+        "profile_picture_url": "https://cdn.HoodMe.com/users/profile_456.jpg",
         "neighborhoods": ["Victoria Island", "Ikoyi"],
         "mutual_neighbors": 5
       }
@@ -301,13 +301,13 @@ Get neighborhood feed.
           "id": "550e8400-e29b-41d4-a716-446655440000",
           "first_name": "John",
           "last_name": "Doe",
-          "profile_picture_url": "https://cdn.Homie.com/users/profile_123.jpg"
+          "profile_picture_url": "https://cdn.HoodMe.com/users/profile_123.jpg"
         },
         "media": [
           {
             "type": "image",
-            "url": "https://cdn.Homie.com/posts/image_789.jpg",
-            "thumbnail_url": "https://cdn.Homie.com/posts/thumb_789.jpg"
+            "url": "https://cdn.HoodMe.com/posts/image_789.jpg",
+            "thumbnail_url": "https://cdn.HoodMe.com/posts/thumb_789.jpg"
           }
         ],
         "reactions_count": {
@@ -345,7 +345,7 @@ Create a new post.
   "post_type": "lost_found",
   "privacy_level": "neighborhood",
   "media_urls": [
-    "https://cdn.Homie.com/temp/upload_abc123.jpg"
+    "https://cdn.HoodMe.com/temp/upload_abc123.jpg"
   ]
 }
 ```
@@ -388,7 +388,7 @@ Get post comments.
         "id": "bbf9500-f39c-51e5-b827-557766556666",
         "first_name": "Sarah",
         "last_name": "Johnson",
-        "profile_picture_url": "https://cdn.Homie.com/users/profile_789.jpg"
+        "profile_picture_url": "https://cdn.HoodMe.com/users/profile_789.jpg"
       },
       "created_at": "2024-01-20T16:15:00Z",
       "replies": []
@@ -445,7 +445,7 @@ Get events in neighborhood.
       "current_attendees": 23,
       "is_free": true,
       "user_rsvp_status": "going",
-      "cover_image_url": "https://cdn.Homie.com/events/cover_123.jpg"
+      "cover_image_url": "https://cdn.HoodMe.com/events/cover_123.jpg"
     }
   ]
 }
@@ -521,13 +521,13 @@ Get marketplace listings.
           "id": "eef9500-f39c-51e5-b827-557766559999",
           "first_name": "Michael",
           "last_name": "Adebayo",
-          "profile_picture_url": "https://cdn.Homie.com/users/profile_321.jpg",
+          "profile_picture_url": "https://cdn.HoodMe.com/users/profile_321.jpg",
           "rating": 4.8,
           "reviews_count": 15
         },
         "media": [
           {
-            "url": "https://cdn.Homie.com/listings/phone_001.jpg",
+            "url": "https://cdn.HoodMe.com/listings/phone_001.jpg",
             "type": "image"
           }
         ],
@@ -562,7 +562,7 @@ Create a marketplace listing.
   "location_details": "Ikoyi area",
   "contact_preference": "in_app",
   "media_urls": [
-    "https://cdn.Homie.com/temp/upload_def456.jpg"
+    "https://cdn.HoodMe.com/temp/upload_def456.jpg"
   ]
 }
 ```
@@ -586,7 +586,7 @@ Get user's conversations.
           "id": "550e8400-e29b-41d4-a716-446655440000",
           "first_name": "John",
           "last_name": "Doe",
-          "profile_picture_url": "https://cdn.Homie.com/users/profile_123.jpg",
+          "profile_picture_url": "https://cdn.HoodMe.com/users/profile_123.jpg",
           "is_online": true,
           "last_seen": "2024-01-20T17:30:00Z"
         }
@@ -787,8 +787,8 @@ Upload an image file.
 {
   "success": true,
   "data": {
-    "url": "https://cdn.Homie.com/uploads/image_xyz789.jpg",
-    "thumbnail_url": "https://cdn.Homie.com/uploads/thumb_xyz789.jpg",
+    "url": "https://cdn.HoodMe.com/uploads/image_xyz789.jpg",
+    "thumbnail_url": "https://cdn.HoodMe.com/uploads/thumb_xyz789.jpg",
     "file_size": 2048576,
     "dimensions": {
       "width": 1920,
@@ -802,7 +802,7 @@ Upload an image file.
 
 ### Connection
 ```javascript
-const socket = io('wss://api.Homie.com/messaging', {
+const socket = io('wss://api.HoodMe.com/messaging', {
   auth: {
     token: 'Bearer <jwt_token>'
   }
@@ -838,7 +838,7 @@ socket.on('user_online', (data) => {
 
 ### Real-time Notifications
 ```javascript
-const notificationSocket = io('wss://api.Homie.com/notifications');
+const notificationSocket = io('wss://api.HoodMe.com/notifications');
 
 notificationSocket.on('new_notification', (notification) => {
   console.log('New notification:', notification);

@@ -4,18 +4,18 @@ services:
   # PostgreSQL Database with PostGIS extension
   postgres:
     image: postgis/postgis:15-3.3
-    container_name: homie-postgres
+    container_name: HoodMe-postgres
     environment:
-      POSTGRES_DB: homie_dev
-      POSTGRES_USER: homie_user
-      POSTGRES_PASSWORD: homie_password
+      POSTGRES_DB: HoodMe_dev
+      POSTGRES_USER: HoodMe_user
+      POSTGRES_PASSWORD: HoodMe_password
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U homie_user -d homie_dev"]
+      test: ["CMD-SHELL", "pg_isready -U HoodMe_user -d HoodMe_dev"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -23,7 +23,7 @@ services:
   # Redis for caching and session storage
   redis:
     image: redis:7-alpine
-    container_name: homie-redis
+    container_name: HoodMe-redis
     ports:
       - "6379:6379"
     volumes:
@@ -37,7 +37,7 @@ services:
   # MinIO for object storage (S3 compatible)
   minio:
     image: minio/minio:latest
-    container_name: homie-minio
+    container_name: HoodMe-minio
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
@@ -56,10 +56,10 @@ services:
   # Message Queue (RabbitMQ)
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: homie-rabbitmq
+    container_name: HoodMe-rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: homie_user
-      RABBITMQ_DEFAULT_PASS: homie_password
+      RABBITMQ_DEFAULT_USER: HoodMe_user
+      RABBITMQ_DEFAULT_PASS: HoodMe_password
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -79,4 +79,4 @@ volumes:
 
 networks:
   default:
-    name: homie-network
+    name: HoodMe-network

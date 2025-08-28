@@ -1,7 +1,7 @@
-# Homie Security Implementation
+# HoodMe Security Implementation
 
 ## Overview
-This document outlines the comprehensive security implementation for Homie, covering authentication, data protection, API security, and compliance with Nigerian Data Protection Regulation (NDPR).
+This document outlines the comprehensive security implementation for HoodMe, covering authentication, data protection, API security, and compliance with Nigerian Data Protection Regulation (NDPR).
 
 ## Authentication & Authorization
 
@@ -28,8 +28,8 @@ interface JWTPayload {
 ```typescript
 const jwtConfig = {
   algorithm: 'RS256', // RSA with SHA-256
-  issuer: 'Homie.com',
-  audience: 'Homie-api',
+  issuer: 'HoodMe.com',
+  audience: 'HoodMe-api',
   accessTokenExpiry: '15m',
   refreshTokenExpiry: '30d',
   keyRotationInterval: '90d'
@@ -58,12 +58,12 @@ const generateKeyPair = async () => {
 // Store keys in AWS Secrets Manager / Azure Key Vault
 const storeKeys = async (publicKey: string, privateKey: string) => {
   await secretsManager.createSecret({
-    Name: 'Homie/jwt/private-key',
+    Name: 'HoodMe/jwt/private-key',
     SecretString: privateKey
   });
   
   await secretsManager.createSecret({
-    Name: 'Homie/jwt/public-key',
+    Name: 'HoodMe/jwt/public-key',
     SecretString: publicKey
   });
 };
@@ -697,7 +697,7 @@ class NDPRComplianceService {
     };
     
     // Generate downloadable file
-    const fileName = `Homie_data_export_${userId}_${Date.now()}.json`;
+    const fileName = `HoodMe_data_export_${userId}_${Date.now()}.json`;
     const filePath = await this.generateSecureDownloadLink(fileName, exportData);
     
     return filePath;
@@ -777,7 +777,7 @@ class SecurityLogger {
     await this.logger.security({
       ...event,
       id: crypto.randomUUID(),
-      service: 'Homie-api'
+      service: 'HoodMe-api'
     });
     
     // Alert on high severity events
@@ -864,4 +864,4 @@ class IntrusionDetectionSystem {
 }
 ```
 
-This comprehensive security implementation ensures that Homie meets international security standards while complying with Nigerian data protection regulations.
+This comprehensive security implementation ensures that HoodMe meets international security standards while complying with Nigerian data protection regulations.

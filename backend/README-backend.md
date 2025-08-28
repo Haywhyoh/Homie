@@ -1,4 +1,4 @@
-# Homie Backend - Community App for Nigeria
+# HoodMe Backend - Community App for Nigeria
 
 A microservices-based backend for a community app that fosters neighborhood connections, information exchange, and collaboration across Nigeria.
 
@@ -18,7 +18,7 @@ This project follows a microservices architecture with the following services:
 ## Project Structure
 
 ```
-homie-backend/
+HoodMe-backend/
 ├── apps/                    # Microservices
 │   ├── api-gateway/         # API Gateway service
 │   ├── auth-service/        # Authentication service
@@ -49,7 +49,7 @@ homie-backend/
 
 1. **Clone and setup the project:**
 ```bash
-   cd homie-backend
+   cd HoodMe-backend
    npm install
    ```
 

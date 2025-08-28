@@ -46,7 +46,7 @@ export class EmailService {
     this.initializeBrevo();
     this.initializeHandlebars();
     this.defaultSender = {
-      name: this.configService.get<string>('EMAIL_FROM_NAME', 'Homie Community'),
+      name: this.configService.get<string>('EMAIL_FROM_NAME', 'HoodMe Community'),
       email: this.configService.get<string>('EMAIL_FROM_ADDRESS', 'ayomide@codemygig.com'),
     };
   }
@@ -123,8 +123,8 @@ export class EmailService {
       template: 'otp-verification',
       context: {
         ...data,
-        brandName: 'Homie Community',
-        supportEmail: 'support@homiecommunity.ng',
+        brandName: 'HoodMe Community',
+        supportEmail: 'support@HoodMecommunity.ng',
         currentYear: new Date().getFullYear(),
       },
     });
@@ -133,15 +133,15 @@ export class EmailService {
   async sendWelcomeEmail(email: string, data: WelcomeEmailData): Promise<boolean> {
     return this.sendEmail({
       to: email,
-      subject: 'Welcome to Homie Community! 🏠',
+      subject: 'Welcome to HoodMe Community! 🏠',
       template: 'welcome',
       context: {
         ...data,
-        brandName: 'Homie Community',
-        supportEmail: 'support@homiecommunity.ng',
+        brandName: 'HoodMe Community',
+        supportEmail: 'support@HoodMecommunity.ng',
         currentYear: new Date().getFullYear(),
-        loginUrl: this.configService.get<string>('FRONTEND_URL', 'https://app.homiecommunity.ng') + '/login',
-        dashboardUrl: this.configService.get<string>('FRONTEND_URL', 'https://app.homiecommunity.ng') + '/dashboard',
+        loginUrl: this.configService.get<string>('FRONTEND_URL', 'https://app.HoodMecommunity.ng') + '/login',
+        dashboardUrl: this.configService.get<string>('FRONTEND_URL', 'https://app.HoodMecommunity.ng') + '/dashboard',
       },
     });
   }
@@ -149,14 +149,14 @@ export class EmailService {
   async sendPasswordResetEmail(email: string, data: PasswordResetEmailData): Promise<boolean> {
     return this.sendEmail({
       to: email,
-      subject: 'Reset Your Homie Community Password 🔐',
+      subject: 'Reset Your HoodMe Community Password 🔐',
       template: 'password-reset',
       context: {
         ...data,
-        brandName: 'Homie Community',
-        supportEmail: 'support@homiecommunity.ng',
+        brandName: 'HoodMe Community',
+        supportEmail: 'support@HoodMecommunity.ng',
         currentYear: new Date().getFullYear(),
-        resetUrl: this.configService.get<string>('FRONTEND_URL', 'https://app.homiecommunity.ng') + '/reset-password',
+        resetUrl: this.configService.get<string>('FRONTEND_URL', 'https://app.HoodMecommunity.ng') + '/reset-password',
       },
     });
   }
@@ -168,8 +168,8 @@ export class EmailService {
       template: 'notification',
       context: {
         ...templateData,
-        brandName: 'Homie Community',
-        supportEmail: 'support@homiecommunity.ng',
+        brandName: 'HoodMe Community',
+        supportEmail: 'support@HoodMecommunity.ng',
         currentYear: new Date().getFullYear(),
       },
     });
@@ -188,13 +188,13 @@ export class EmailService {
   private getOtpEmailSubject(purpose: string): string {
     switch (purpose) {
       case 'registration':
-        return 'Verify Your Homie Community Account 📧';
+        return 'Verify Your HoodMe Community Account 📧';
       case 'login':
-        return 'Your Homie Community Login Code 🔐';
+        return 'Your HoodMe Community Login Code 🔐';
       case 'password_reset':
-        return 'Reset Your Homie Community Password 🔒';
+        return 'Reset Your HoodMe Community Password 🔒';
       default:
-        return 'Your Homie Community Verification Code';
+        return 'Your HoodMe Community Verification Code';
     }
   }
 
@@ -202,12 +202,12 @@ export class EmailService {
   async sendTestEmail(email: string): Promise<boolean> {
     return this.sendEmail({
       to: email,
-      subject: 'Homie Community - Email Service Test ✅',
+      subject: 'HoodMe Community - Email Service Test ✅',
       template: 'test',
       context: {
         testTime: new Date().toISOString(),
-        brandName: 'Homie Community',
-        supportEmail: 'support@homiecommunity.ng',
+        brandName: 'HoodMe Community',
+        supportEmail: 'support@HoodMecommunity.ng',
         currentYear: new Date().getFullYear(),
       },
     });
@@ -230,8 +230,8 @@ export class EmailService {
           template: templateName,
           context: {
             ...context,
-            brandName: 'Homie Community',
-            supportEmail: 'support@homiecommunity.ng',
+            brandName: 'HoodMe Community',
+            supportEmail: 'support@HoodMecommunity.ng',
             currentYear: new Date().getFullYear(),
           },
         });

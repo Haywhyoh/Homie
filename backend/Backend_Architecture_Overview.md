@@ -1,7 +1,7 @@
-# Homie Backend Architecture Overview
+# HoodMe Backend Architecture Overview
 
 ## Project Summary
-Homie is a mobile application designed to foster community connection, information exchange, and collaboration among individuals living in various neighborhoods across Nigeria (NextDoor for Nigeria).
+HoodMe is a mobile application designed to foster community connection, information exchange, and collaboration among individuals living in various neighborhoods across Nigeria (NextDoor for Nigeria).
 
 ## High-Level Architecture
 

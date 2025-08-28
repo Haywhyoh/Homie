@@ -1,7 +1,7 @@
-# Homie Development Log & Task Tracker
+# HoodMe Development Log & Task Tracker
 
 ## Overview
-This development log breaks down the Homie backend implementation into manageable tasks using NestJS. Each task includes specific guidelines, acceptance criteria, and estimated effort.
+This development log breaks down the HoodMe backend implementation into manageable tasks using NestJS. Each task includes specific guidelines, acceptance criteria, and estimated effort.
 
 ## Project Setup & Configuration
 
@@ -21,7 +21,7 @@ This development log breaks down the Homie backend implementation into manageabl
 #### Guidelines:
 ```bash
 # Project structure
-Homie-backend/
+HoodMe-backend/
 ├── apps/
 │   ├── auth-service/
 │   ├── user-service/
@@ -45,8 +45,8 @@ Homie-backend/
 1. **Initialize NestJS Monorepo**:
    ```bash
    npm i -g @nestjs/cli
-   nest new Homie-backend
-   cd Homie-backend
+   nest new HoodMe-backend
+   cd HoodMe-backend
    nest generate app auth-service
    nest generate app user-service
    # Continue for other services

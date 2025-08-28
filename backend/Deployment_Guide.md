@@ -1,7 +1,7 @@
-# Homie Deployment Guide
+# HoodMe Deployment Guide
 
 ## Overview
-This document provides comprehensive deployment instructions for Homie, covering containerization, Kubernetes orchestration, CI/CD pipelines, and infrastructure setup.
+This document provides comprehensive deployment instructions for HoodMe, covering containerization, Kubernetes orchestration, CI/CD pipelines, and infrastructure setup.
 
 ## Prerequisites
 
@@ -95,7 +95,7 @@ CMD ["node", "dist/index.js"]
 
 #### API Gateway Service
 ```dockerfile
-FROM Homie/base-node:latest AS base
+FROM HoodMe/base-node:latest AS base
 
 COPY package*.json ./
 RUN npm ci --only=production
@@ -109,7 +109,7 @@ CMD ["node", "dist/gateway.js"]
 
 #### Messaging Service (with Socket.io)
 ```dockerfile
-FROM Homie/base-node:latest AS base
+FROM HoodMe/base-node:latest AS base
 
 COPY package*.json ./
 RUN npm ci --only=production
@@ -131,8 +131,8 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: Homie_dev
-      POSTGRES_USER: Homie
+      POSTGRES_DB: HoodMe_dev
+      POSTGRES_USER: HoodMe
       POSTGRES_PASSWORD: development_password
     ports:
       - "5432:5432"
@@ -170,7 +170,7 @@ services:
       context: ./services/auth
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: postgresql://Homie:development_password@postgres:5432/Homie_dev
+      DATABASE_URL: postgresql://HoodMe:development_password@postgres:5432/HoodMe_dev
       REDIS_URL: redis://redis:6379
       JWT_SECRET: development-secret-key
     ports:
@@ -184,7 +184,7 @@ services:
       context: ./services/user
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: postgresql://Homie:development_password@postgres:5432/Homie_dev
+      DATABASE_URL: postgresql://HoodMe:development_password@postgres:5432/HoodMe_dev
       REDIS_URL: redis://redis:6379
     ports:
       - "3002:3000"
@@ -197,7 +197,7 @@ services:
       context: ./services/social
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: postgresql://Homie:development_password@postgres:5432/Homie_dev
+      DATABASE_URL: postgresql://HoodMe:development_password@postgres:5432/HoodMe_dev
       REDIS_URL: redis://redis:6379
       ELASTICSEARCH_URL: http://elasticsearch:9200
     ports:
@@ -212,7 +212,7 @@ services:
       context: ./services/messaging
       dockerfile: Dockerfile
     environment:
-      DATABASE_URL: postgresql://Homie:development_password@postgres:5432/Homie_dev
+      DATABASE_URL: postgresql://HoodMe:development_password@postgres:5432/HoodMe_dev
       REDIS_URL: redis://redis:6379
     ports:
       - "3004:3000"
@@ -245,7 +245,7 @@ volumes:
 
 networks:
   default:
-    name: Homie-network
+    name: HoodMe-network
 ```
 
 ## Kubernetes Deployment
@@ -256,9 +256,9 @@ networks:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: Homie
+  name: HoodMe
   labels:
-    name: Homie
+    name: HoodMe
     environment: production
 ---
 # k8s/configmap.yaml
@@ -266,7 +266,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
-  namespace: Homie
+  namespace: HoodMe
 data:
   NODE_ENV: "production"
   API_VERSION: "v1"
@@ -289,10 +289,10 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: app-secrets
-  namespace: Homie
+  namespace: HoodMe
 type: Opaque
 stringData:
-  DATABASE_URL: "postgresql://user:password@postgres-service:5432/Homie"
+  DATABASE_URL: "postgresql://user:password@postgres-service:5432/HoodMe"
   REDIS_PASSWORD: "redis-production-password"
   JWT_PRIVATE_KEY: |
     -----BEGIN PRIVATE KEY-----
@@ -320,7 +320,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-service
-  namespace: Homie
+  namespace: HoodMe
   labels:
     app: auth-service
     version: v1
@@ -340,10 +340,10 @@ spec:
         app: auth-service
         version: v1
     spec:
-      serviceAccountName: Homie-service-account
+      serviceAccountName: HoodMe-service-account
       containers:
       - name: auth-service
-        image: Homie/auth-service:latest
+        image: HoodMe/auth-service:latest
         ports:
         - containerPort: 3000
           name: http
@@ -426,7 +426,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: auth-service
-  namespace: Homie
+  namespace: HoodMe
   labels:
     app: auth-service
 spec:
@@ -446,7 +446,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: messaging-service
-  namespace: Homie
+  namespace: HoodMe
 spec:
   replicas: 3
   selector:
@@ -459,7 +459,7 @@ spec:
     spec:
       containers:
       - name: messaging-service
-        image: Homie/messaging-service:latest
+        image: HoodMe/messaging-service:latest
         ports:
         - containerPort: 3000
           name: http
@@ -485,7 +485,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: messaging-service
-  namespace: Homie
+  namespace: HoodMe
   annotations:
     # Enable session affinity for WebSocket connections
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
@@ -512,7 +512,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: auth-service-hpa
-  namespace: Homie
+  namespace: HoodMe
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -551,7 +551,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: social-service-hpa
-  namespace: Homie
+  namespace: HoodMe
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -580,8 +580,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: Homie-ingress
-  namespace: Homie
+  name: HoodMe-ingress
+  namespace: HoodMe
   annotations:
     kubernetes.io/ingress.class: "aws-load-balancer"
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -598,7 +598,7 @@ metadata:
     nginx.ingress.kubernetes.io/rate-limit-window: "1m"
 spec:
   rules:
-  - host: api.Homie.com
+  - host: api.HoodMe.com
     http:
       paths:
       - path: /api/v1/auth
@@ -652,8 +652,8 @@ spec:
               number: 3001
   tls:
   - hosts:
-    - api.Homie.com
-    secretName: Homie-tls
+    - api.HoodMe.com
+    secretName: HoodMe-tls
 ```
 
 ## CI/CD Pipeline
@@ -671,8 +671,8 @@ on:
 
 env:
   AWS_REGION: eu-west-1
-  EKS_CLUSTER_NAME: Homie-production
-  ECR_REPOSITORY: Homie
+  EKS_CLUSTER_NAME: HoodMe-production
+  ECR_REPOSITORY: HoodMe
 
 jobs:
   test:
@@ -683,7 +683,7 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: Homie_test
+          POSTGRES_DB: HoodMe_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -730,7 +730,7 @@ jobs:
       run: npm run test:integration
       env:
         NODE_ENV: test
-        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/Homie_test
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/HoodMe_test
         REDIS_URL: redis://localhost:6379
     
     - name: Run security audit
@@ -841,24 +841,24 @@ jobs:
         for service in auth user social messaging marketplace notification gateway; do
           kubectl set image deployment/${service}-service \
             ${service}-service=$ECR_REGISTRY/$ECR_REPOSITORY-${service}:$IMAGE_TAG \
-            -n Homie
+            -n HoodMe
         done
     
     - name: Verify deployment
       run: |
-        kubectl rollout status deployment/auth-service -n Homie --timeout=300s
-        kubectl rollout status deployment/social-service -n Homie --timeout=300s
-        kubectl rollout status deployment/messaging-service -n Homie --timeout=300s
+        kubectl rollout status deployment/auth-service -n HoodMe --timeout=300s
+        kubectl rollout status deployment/social-service -n HoodMe --timeout=300s
+        kubectl rollout status deployment/messaging-service -n HoodMe --timeout=300s
     
     - name: Run smoke tests
       run: |
         # Wait for services to be ready
-        kubectl wait --for=condition=available deployment --all -n Homie --timeout=300s
+        kubectl wait --for=condition=available deployment --all -n HoodMe --timeout=300s
         
         # Run smoke tests against the deployed services
         npm run test:smoke
       env:
-        API_BASE_URL: https://api.Homie.com
+        API_BASE_URL: https://api.HoodMe.com
         SMOKE_TEST_API_KEY: ${{ secrets.SMOKE_TEST_API_KEY }}
     
     - name: Notify deployment status
@@ -878,7 +878,7 @@ jobs:
 
 set -e
 
-NAMESPACE="Homie"
+NAMESPACE="HoodMe"
 SERVICES=("auth-service" "user-service" "social-service" "messaging-service" "marketplace-service")
 
 echo "Starting rollback process..."
@@ -928,11 +928,11 @@ terraform {
   }
   
   backend "s3" {
-    bucket = "Homie-terraform-state"
+    bucket = "HoodMe-terraform-state"
     key    = "production/terraform.tfstate"
     region = "eu-west-1"
     
-    dynamodb_table = "Homie-terraform-locks"
+    dynamodb_table = "HoodMe-terraform-locks"
     encrypt        = true
   }
 }
@@ -942,7 +942,7 @@ provider "aws" {
   
   default_tags {
     tags = {
-      Project     = "Homie"
+      Project     = "HoodMe"
       Environment = var.environment
       ManagedBy   = "Terraform"
     }
@@ -953,7 +953,7 @@ provider "aws" {
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   
-  name = "Homie-vpc"
+  name = "HoodMe-vpc"
   cidr = "10.0.0.0/16"
   
   azs             = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
@@ -966,7 +966,7 @@ module "vpc" {
   enable_dns_support = true
   
   tags = {
-    Name = "Homie-vpc"
+    Name = "HoodMe-vpc"
   }
 }
 
@@ -974,7 +974,7 @@ module "vpc" {
 module "eks" {
   source = "terraform-aws-modules/eks/aws"
   
-  cluster_name    = "Homie-${var.environment}"
+  cluster_name    = "HoodMe-${var.environment}"
   cluster_version = "1.27"
   
   vpc_id     = module.vpc.vpc_id
@@ -1043,7 +1043,7 @@ module "eks" {
 
 # RDS PostgreSQL
 resource "aws_db_instance" "postgres" {
-  identifier = "Homie-postgres-${var.environment}"
+  identifier = "HoodMe-postgres-${var.environment}"
   
   engine         = "postgres"
   engine_version = "15.3"
@@ -1054,8 +1054,8 @@ resource "aws_db_instance" "postgres" {
   storage_type          = "gp3"
   storage_encrypted     = true
   
-  db_name  = "Homie"
-  username = "Homie"
+  db_name  = "HoodMe"
+  username = "HoodMe"
   password = var.db_password
   
   vpc_security_group_ids = [aws_security_group.rds.id]
@@ -1066,7 +1066,7 @@ resource "aws_db_instance" "postgres" {
   maintenance_window     = "sun:04:00-sun:05:00"
   
   skip_final_snapshot = false
-  final_snapshot_identifier = "Homie-postgres-final-snapshot-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
+  final_snapshot_identifier = "HoodMe-postgres-final-snapshot-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
   
   monitoring_interval = 60
   monitoring_role_arn = aws_iam_role.rds_monitoring.arn
@@ -1074,14 +1074,14 @@ resource "aws_db_instance" "postgres" {
   performance_insights_enabled = true
   
   tags = {
-    Name = "Homie-postgres"
+    Name = "HoodMe-postgres"
   }
 }
 
 # ElastiCache Redis
 resource "aws_elasticache_replication_group" "redis" {
-  replication_group_id         = "Homie-redis-${var.environment}"
-  description                  = "Redis cluster for Homie"
+  replication_group_id         = "HoodMe-redis-${var.environment}"
+  description                  = "Redis cluster for HoodMe"
   
   node_type                    = var.redis_node_type
   port                         = 6379
@@ -1106,16 +1106,16 @@ resource "aws_elasticache_replication_group" "redis" {
   }
   
   tags = {
-    Name = "Homie-redis"
+    Name = "HoodMe-redis"
   }
 }
 
 # S3 Buckets
 resource "aws_s3_bucket" "media" {
-  bucket = "Homie-media-${var.environment}-${random_id.bucket_suffix.hex}"
+  bucket = "HoodMe-media-${var.environment}-${random_id.bucket_suffix.hex}"
   
   tags = {
-    Name = "Homie-media"
+    Name = "HoodMe-media"
     Type = "media-storage"
   }
 }
@@ -1184,7 +1184,7 @@ resource "aws_cloudfront_distribution" "media_cdn" {
   }
   
   tags = {
-    Name = "Homie-media-cdn"
+    Name = "HoodMe-media-cdn"
   }
 }
 ```
@@ -1210,8 +1210,8 @@ eks_max_nodes = 20
 eks_desired_nodes = 8
 
 # Application configuration
-domain_name = "Homie.com"
-api_domain = "api.Homie.com"
+domain_name = "HoodMe.com"
+api_domain = "api.HoodMe.com"
 ```
 
-This comprehensive deployment guide provides a production-ready setup for Homie with proper security, scalability, and monitoring in place.
+This comprehensive deployment guide provides a production-ready setup for HoodMe with proper security, scalability, and monitoring in place.
